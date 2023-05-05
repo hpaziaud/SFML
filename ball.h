@@ -1,35 +1,37 @@
+#pragma once
+#include "Player.h"
+#include "Brick.h"
+
+
 #include <SFML/Graphics.hpp>
 
-int main()
+class Ball
 {
-    // Création de la fenêtre
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Ma fenêtre");
+private:
+	sf::CircleShape shape;
+	sf::Vector2f oldPosition;
+	sf::Vector2f position;
+	float speed;
+	int radius;
+	int collisionCount; // Compteur de collisions avec le joueur
 
-    // Création du cercle (balle)
-    sf::CircleShape circle(50.f);
-    circle.setFillColor(sf::Color::Red);
-    circle.setPosition(400.f, 300.f);
+	sf::Vector2f direction;
+	static bool isRandInitialized;
+	double randomizeAngle();
+	void setAngle(double angle);
+public:
+	Ball(int x, int y, int radius, float speed);
+	~Ball();
+	void move(float ellapsedTime);
+	void draw(sf::RenderWindow& window);
+	float getSpeed();
+	void setSpeed(float newSpeed);
+	void setPosition(sf::Vector2f newPosition);
+	void setDirection(sf::Vector2f newDirection);
+	sf::Vector2f getPosition();
+	void manageCollisionWith(Player& player, sf::RenderWindow& window);
+	void update(float deltaTime, Player& player, sf::RenderWindow& window);
+	void manageCollisionWithBrick(Brick* brick);
 
-    // Boucle principale
-    while (window.isOpen())
-    {
-        // Gestion des événements
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
 
-        // Effacement de la fenêtre
-        window.clear(sf::Color::White);
-
-        // Dessin du cercle
-        window.draw(circle);
-
-        // Actualisation de la fenêtre
-        window.display();
-    }
-
-    return 0;
-}
+};
